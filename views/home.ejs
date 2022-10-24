@@ -1,0 +1,77 @@
+<%- include('./shared/head.ejs') %>
+    <link rel="stylesheet" type="text/css" href="/css/home.css">
+    </head>
+
+    <body>
+        <main>
+            <div>
+                <% if(loggedInUserEmail){ %>
+                    <div class="login-actions">
+                        <p>You are logged in as: <b><%= loggedInUserEmail%></b> </p>
+                        <a href="logout"><button>LOGOUT</button></a>
+                    </div>
+                  <% } else { %>  
+                    <div class="login-actions">
+                        <p>You are not logged in</p>
+                        <a href="login"><button>LOGIN</button></a>
+                    </div>
+                 <% } %>
+            </div>
+           <div class="outer-container">
+            <div class="title">
+                <h1>1. HNL</h1>
+            </div>
+            <div class="matches-container">
+                <% for(var i=0; i<matches.length; i++) {%>
+                <div class="match">
+                    <div class="info">
+                        <p><%= matches[i].homeTeam%></p>
+                        <% if(matches[i].played){ %>
+                            <p><%= matches[i].result%></p>
+                          <% } else{ %>  
+                            <p class="alert">UPCOMING MATCH</p>
+                         <% } %>
+                        
+                        <p><%= matches[i].guestTeam%></p>
+                        <% if(loggedInUserEmail && loggedInUserEmail == 'admin@gmail.com'){ %>
+                            <div><a href="/update_match?matchId=<%= matches[i].id%>"><button>Update</button></a></div>
+                        <% } %> 
+
+                        <% if(matches[i].comments.length != 0){ %>
+                            <% for(var j=0; j<matches[i].comments.length; j++) {%>
+                                <div class="comments-container">
+                                    <div class="comment">
+                                       <div class="header">
+                                        <p><%= matches[i].comments[j].authorEmail%></p>
+                                        <p><%= matches[i].comments[j].publishTime%></p>
+                                       </div>
+                                       <div class="body">
+                                        <p><%= matches[i].comments[j].comment%></p>
+                                       </div>
+                                       <div style="width:50px; background-color:aqua;">
+                                        <a href="/edit?authorEmail=<%= matches[i].comments[j].authorEmail%>&commentId=<%= matches[i].comments[j].id%>">Edit</a>
+                                       </div>
+                                       <% if(loggedInUserEmail){ %>
+                                        <div style="width:50px; background-color:red;">
+                                            <a style="color: white;"  href="/delete?commentId=<%= matches[i].comments[j].id%>">Delete</a>
+                                           </div>
+                                    <% } %> 
+                                    </div>
+                                </div>
+                                <% } %>
+                          
+                          <% } %>  
+
+                        
+                    </div>
+                    <div class="actions">
+                        <div>
+                            <a href="/comment?matchId=<%= matches[i].id %>">Add comment</a>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+           </div>
+        </main>
+        <%- include('./shared/end.ejs') %>

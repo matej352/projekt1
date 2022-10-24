@@ -1,0 +1,15 @@
+<%- include('./shared/head.ejs') %>
+    <link rel="stylesheet" type="text/css" href="/css/comment.css">
+    </head>
+
+    <body>
+        <main>
+            <div class="form-container">
+                <form action="/edit_comment?commentId=<%= comment.id %>" method="POST">
+                    <textarea name="comment" id="comment" cols="30" rows="10"
+                        placeholder="Write your comment"><%= comment.comment%></textarea>
+                    <button type="submit">Confirm</button>
+                </form>
+            </div>
+        </main>
+        <%- include('./shared/end.ejs') %>

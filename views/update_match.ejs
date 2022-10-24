@@ -1,0 +1,27 @@
+<%- include('./shared/head.ejs') %>
+    <link rel="stylesheet" type="text/css" href="/css/match.css">
+    </head>
+
+    <body>
+        <div class="outer">
+            <div class="inner">
+                <form action="/update_match?matchId=<%= match.id %>" method="POST">
+                    <p>
+                        <%= match.homeTeam%>
+                    </p>
+                    <% if(match.played){ %>
+                        <p>
+                            <input type="text" name="result" id="result" value=" <%= match.result%>">
+                        </p>
+                        <% } else{ %>
+                            <input type="text" name="result" id="result" placeholder="Match not played yet">
+                            <% } %>
+
+                                <p>
+                                    <%= match.guestTeam%>
+                                </p>
+                                <button type="submit">Confirm</button>
+                </form>
+            </div>
+        </div>
+        <%- include('./shared/end.ejs') %>
