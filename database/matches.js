@@ -27,6 +27,34 @@ matches = [
         "id": 4,
         "homeTeam": "Istra",
         "guestTeam": "Hajduk",
+        "played": true,
+        "result": "1:1"
+    },
+    {
+        "id": 5,
+        "homeTeam": "Varaždin",
+        "guestTeam": "Slaven",
+        "played": true,
+        "result": "1:0"
+    },
+    {
+        "id": 6,
+        "homeTeam": "Istra",
+        "guestTeam": "Varaždin",
+        "played": true,
+        "result": "1:2"
+    },
+    {
+        "id": 7,
+        "homeTeam": "Gorica",
+        "guestTeam": "Šibenik",
+        "played": true,
+        "result": "0:0"
+    },
+    {
+        "id": 8,
+        "homeTeam": "Lokomotiva",
+        "guestTeam": "Osijek",
         "played": false,
         "result": null
     },

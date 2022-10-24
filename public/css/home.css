@@ -8,7 +8,7 @@ main {
 
 .title {
   background-color: aqua;
-  width: 100%;
+  width: 500px;
   display: flex;
   justify-content: center;
 }
@@ -23,7 +23,7 @@ main {
 }
 
 .matches-container {
-  width: 100%;
+  width: 500px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -88,4 +88,15 @@ main {
 
 .comments-container {
   margin-top: 10px;
+}
+
+
+.leftAndRight {
+  display: flex;
+}
+
+.score-table {
+  display: flex;
+  flex-direction: column;
+  margin-left: 50px;
 }

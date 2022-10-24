@@ -1,5 +1,6 @@
-const { matches, connectMatchesWithComments } = require('./../database/matches.js')
+const { connectMatchesWithComments } = require('./../database/matches.js')
 const express = require('express');
+const team  = require('../database/teamScores.js');
 
 const router = express.Router();
 
@@ -12,12 +13,17 @@ router.get('/home', function (req, res) {
        loggedInUserEmail = user.email;
       
     }
+
+    //get data for scores table
+    team.calculatePoints();
+    const teams = team.getTeamsOrderdByScoreDesc();
     
     matchesWithComments = connectMatchesWithComments();
 
     res.render('home', {
         loggedInUserEmail: loggedInUserEmail,
         matches: matchesWithComments,
+        teams: teams
     });
 });
 

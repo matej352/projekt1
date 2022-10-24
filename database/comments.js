@@ -13,6 +13,13 @@ comments = [
         "authorEmail": "slavko@gmail.com",
         "publishTime": new Date().toLocaleString()
     },
+    {
+        "id": 3,
+        "matchId": 3,
+        "comment": "Tako se to radi!",
+        "authorEmail": "slavko@gmail.com",
+        "publishTime": new Date().toLocaleString()
+    },
 ]
 
 
