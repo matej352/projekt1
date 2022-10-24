@@ -7,6 +7,10 @@ const { requiresAuth } = require('express-openid-connect');
 const bodyParser = require('body-parser');
 const comments = require('./database/comments.js')
 const matches = require('./database/matches.js')
+var fs = require('fs');
+
+const externalUrl = process.env.RENDER_EXTERNAL_URL;
+const PORT = externalUrl && process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
 
 
@@ -30,9 +34,14 @@ const config = {
 	auth0Logout: true,
 	idpLogout: true,		//ok
 	secret: process.env.SECRET,		//ok
-	baseURL: 'http://localhost:3000',		//ok
+	baseURL: externalUrl || `https://localhost:${PORT}`,		//ok
 	clientID: process.env.CLIENT_ID,		//ok
-	issuerBaseURL: 'https://dev-omid1itejk8yys2k.eu.auth0.com'	//ok
+	issuerBaseURL: 'https://dev-omid1itejk8yys2k.eu.auth0.com',	//ok
+	clientSecret: process.env.CLIENT_SECRET,
+	authorizationParams: {
+		response_type: 'code' ,
+		//scope: "openid profile email"   
+	   },
 };
 
 // auth router attaches /login, /logout, and /callback routes to the baseURL
@@ -71,7 +80,7 @@ app.post('/edit_comment', requiresAuth(), function (req, res) {
 
 	const user = req.oidc.user;
 	var loggedInUserEmail = user.email;
-	
+
 
 	var commentId = req.query.commentId;
 	var comment = req.body.comment;
@@ -101,7 +110,7 @@ app.get('/edit', requiresAuth(), function (req, res) {
 	} else {
 
 		var comment = comments.getCommentById(commentId);
-		
+
 		res.render('edit_comment', {
 			comment: comment,
 		});
@@ -128,7 +137,7 @@ app.get('/update_match', requiresAuth(), function (req, res) {
 	} else {
 
 		var match = matches.getMatchById(matchId);
-		
+
 		res.render('update_match', {
 			match: match,
 		});
@@ -146,7 +155,7 @@ app.post('/update_match', requiresAuth(), function (req, res) {
 
 	const user = req.oidc.user;
 	var loggedInUserEmail = user.email;
-	
+
 	if (loggedInUserEmail !== 'admin@gmail.com') {
 		res.redirect('home');
 	}
@@ -167,13 +176,13 @@ app.get('/delete', requiresAuth(), function (req, res) {
 	var loggedInUserEmail = user.email;
 	var commentId = req.query.commentId;
 	var commentAuthorEmail = comments.getCommentById(commentId).authorEmail;
-	
+
 	if (loggedInUserEmail !== 'admin@gmail.com' && loggedInUserEmail !== commentAuthorEmail) {
 		res.redirect('home');
 	} else {
-		
+
 		comments.deleteComment(commentId);
-	
+
 		res.redirect('home');
 	}
 
@@ -190,13 +199,20 @@ const homeController = require('./controllers/homeController');
 
 app.use(homeController);
 
-
-const PORT = 3000;
-
-app.listen(PORT, (error) => {
-	if (!error)
-		console.log("Server is Successfully Running, and App is listening on port " + PORT)
-	else
-		console.log("Error occurred, server can't start", error);
+if (externalUrl) {
+	const hostname = '127.0.0.1';
+	app.listen(PORT, hostname, () => {
+		console.log(`Server locally running at http://${hostname}:${PORT}/ and from
+	outside on ${externalUrl}`);
+	});	
+} else {
+	https.createServer({
+		key: fs.readFileSync('server.key'),
+		cert: fs.readFileSync('server.cert')
+	}, app)
+		.listen(PORT, function () {
+			console.log(`Server running at https://localhost:${PORT}/`);
+		});
 }
-);
+
+
